@@ -1,1 +1,3 @@
-import yourtube
+from yourtube import main
+
+main()

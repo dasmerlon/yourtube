@@ -1,3 +1,5 @@
 .venv
 yourtube.db
 __pycache__
+yourtube.egg-info
+config.toml

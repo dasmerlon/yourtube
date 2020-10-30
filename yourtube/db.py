@@ -5,7 +5,9 @@ from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_utils.functions import database_exists, create_database
 
-engine = create_engine("sqlite:///yourtube.db")
+from yourtube.config import config
+
+engine = create_engine(config["database"]["sql_uri"])
 base = declarative_base(bind=engine)
 
 
