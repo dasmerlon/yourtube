@@ -23,7 +23,7 @@ config_path = os.path.expanduser("./config.toml")
 if not os.path.exists(config_path):
     with open(config_path, "w") as file_descriptor:
         toml.dump(default_config, file_descriptor)
-    print(f"Please adjust the configuration file at '{config_path}'")
+    print(f"Please adjust the newly created configuration file at '{config_path}'")
     sys.exit(1)
 else:
     config = toml.load(config_path)
