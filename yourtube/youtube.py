@@ -1,38 +1,43 @@
 from pprint import pprint
-import pyyoutube
+from googleapiclient.discovery import build
 
 from yourtube.config import config
 
 # Initialize the api once during the loading phase of the program
 # Just use it by importing `api` anywhere in this program
-# There's an excellent tutorial on how to do this in the pyyoutube Docs:
-# https://python-youtube.readthedocs.io/en/latest/getting_started.html
-api = pyyoutube.Api(api_key=config["youtube"]["api_key"])
+# Check google's official python api docs for more info:
+# https://github.com/googleapis/google-api-python-client/blob/master/docs/start.md
+# https://github.com/googleapis/google-api-python-client/blob/master/docs/api-keys.md
+#
+# Google's official api docs also have an api-tester on the right side of the screen
+# This can be also used to show code examples by clicking on `Show Code`.
+# There are python code examples for pretty much everything.
+# For example:
+# https://developers.google.com/youtube/v3/docs/channels/list
+# https://developers.google.com/youtube/v3/docs/playlists/list
+# https://developers.google.com/youtube/v3/docs/playlistItems/list
+youtube = build("youtube", "v3", developerKey=config["youtube"]["api_key"])
 
 
-def get_videos_of_subscription(name):
-    """Return all videos of a specific subscription."""
-    # Get general information of this channel
-    channels = api.get_channel_info(channel_name=name)
-    channel = channels.items[0]
+def get_channel_videos(channel_name):
+    channel_response = (
+        youtube.channels()
+        .list(part="contentDetails,topicDetails", id="UCZNTsLA6t6bRoj-5QRmqt_w")
+        .execute()
+    )
+    # Get the first item (only one should exist at a time
+    channel = channel_response["items"][0]
 
-    # Looks like one has to look at the related playlists to get to the channel's uploads
-    playlist_id = channel.contentDetails.relatedPlaylists.uploads
+    # Get the playlist id of the channel's uploads
+    playlist_id = channel["contentDetails"]["relatedPlaylists"]["uploads"]
+    pprint(playlist_id)
 
-    all_uploads = []
-    result = None
-    while result is None or len(result.items) > 0:
-        print("Playlist by id")
-        result = api.get_playlist_by_id(playlist_id=playlist_id)
-        pprint(playlist_id)
-        pprint(result)
-        pprint(result.items)
-        all_uploads += result.items
+    # Query playlist items
+    playlist_response = (
+        youtube.playlistItems()
+        .list(part="contentDetails", playlistId=playlist_id)
+        .execute()
+    )
 
-        print("Playlist items")
-        result = api.get_playlist_items(playlist_id=playlist_id, limit=50)
-        pprint(result)
-        pprint(result.items)
-        all_uploads += result.items
-
-    pprint(all_uploads)
+    pprint(playlist_response)
+    return playlist_response
