@@ -8,7 +8,7 @@ import toml
 default_config = {
     "youtube": {"api_key": "Your api key here"},
     "database": {
-        "sql_uri": "sqlite://yourtube",
+        "sql_uri": "sqlite:///yourtube.db",
     },
     "logging": {
         "sentry_enabled": False,

@@ -5,6 +5,8 @@ from yourtube.config import config
 
 # Initialize the api once during the loading phase of the program
 # Just use it by importing `api` anywhere in this program
+# There's an excellent tutorial on how to do this in the pyyoutube Docs:
+# https://python-youtube.readthedocs.io/en/latest/getting_started.html
 api = pyyoutube.Api(api_key=config["youtube"]["api_key"])
 
 
