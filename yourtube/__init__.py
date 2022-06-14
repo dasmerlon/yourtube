@@ -1,7 +1,7 @@
 from yourtube.config import config
-from yourtube.youtube import get_videos_of_subscription
+from yourtube.youtube import get_channel_videos
 
 
 def main():
-    get_videos_of_subscription("lowkotv")
+    get_channel_videos("lowkotv")
     pass
